@@ -1,0 +1,22 @@
+[Unit]
+Description=Conntrack Daemon
+Documentation=man:conntrackd(8) man:conntrackd.conf(5)
+<%- if @systemd_before -%>
+Before=<%= @systemd_before.join(' ') %>
+<%- end -%>
+<%- if @systemd_after -%>
+After=<%= @systemd_after.join(' ') %>
+<%- end -%>
+<%- if @systemd_wants -%>
+Wants=<%= @systemd_wants.join(' ') %>
+<%- end -%>
+
+[Service]
+Type=notify
+ExecStart=/usr/sbin/conntrackd -C /etc/conntrackd/conntrackd.conf
+Restart=on-failure
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target <%= @systemd_wanted_by.join(' ') %>

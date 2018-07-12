@@ -143,6 +143,11 @@ class conntrackd::params {
   $stats_syslog = undef
 
   $systemd = false
+  $systemd_after = [ 'network.target', 'network-online.target' ]
+  $systemd_wants = [ 'network-online.target' ]
+  $systemd_before = [ ]
+  $systemd_wantedby = [ ]
+
   $expectation_sync = 'Off'
 
   $kernel_ignore_ips_ipv4 = [ '127.0.0.1', '192.168.0.1', '10.1.1.1' ]
