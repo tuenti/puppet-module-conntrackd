@@ -441,7 +441,7 @@ class conntrackd::config (
     file { 'conntrackd-systemd-unit':
       ensure  => file,
       path    => '/lib/systemd/system/conntrackd.service',
-      content => template('conntrackd/systemd.unit.erb'),
+      content => template('conntrackd/systemd.service.erb'),
       mode    => '0644',
       require => Package['conntrackd'],
     }
