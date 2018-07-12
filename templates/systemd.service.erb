@@ -1,13 +1,13 @@
 [Unit]
 Description=Conntrack Daemon
 Documentation=man:conntrackd(8) man:conntrackd.conf(5)
-<%- if @systemd_before -%>
+<%- if @systemd_before.length > 0 -%>
 Before=<%= @systemd_before.join(' ') %>
 <%- end -%>
-<%- if @systemd_after -%>
+<%- if @systemd_after.length > 0 -%>
 After=<%= @systemd_after.join(' ') %>
 <%- end -%>
-<%- if @systemd_wants -%>
+<%- if @systemd_wants.length > 0 -%>
 Wants=<%= @systemd_wants.join(' ') %>
 <%- end -%>
 
