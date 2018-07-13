@@ -436,7 +436,7 @@ class conntrackd::config (
     notify  => Service['conntrackd'],
   }
 
-  if !$systemd || $conntrackd::ensure == 'absent' {
+  if !$systemd or $conntrackd::ensure in [false, 'absent'] {
     $systemd_file_ensure = 'absent'
   } else {
     $systemd_file_ensure = 'file'
