@@ -436,14 +436,18 @@ class conntrackd::config (
     notify  => Service['conntrackd'],
   }
 
-  if $systemd {
+  if !$systemd || $conntrackd::ensure == 'absent' {
+    $systemd_file_ensure = 'absent'
+  } else {
+    $systemd_file_ensure = 'file'
+  }
+
   # configuration file
-    file { 'conntrackd-systemd-unit':
-      ensure  => file,
-      path    => '/lib/systemd/system/conntrackd.service',
-      content => template('conntrackd/systemd.service.erb'),
-      mode    => '0644',
-      require => Package['conntrackd'],
-    }
+  file { 'conntrackd-systemd-unit':
+    ensure  => $systemd_file_ensure,
+    path    => '/lib/systemd/system/conntrackd.service',
+    content => template('conntrackd/systemd.service.erb'),
+    mode    => '0644',
+    require => Package['conntrackd'],
   }
 }
