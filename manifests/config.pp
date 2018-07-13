@@ -443,11 +443,10 @@ class conntrackd::config (
   }
 
   # configuration file
-  file { 'conntrackd-systemd-unit':
+  systemd::unit_file { 'conntrackd.service':
     ensure  => $systemd_file_ensure,
-    path    => '/lib/systemd/system/conntrackd.service',
+    path    => '/lib/systemd/system',
     content => template('conntrackd/systemd.service.erb'),
-    mode    => '0644',
     require => Package['conntrackd'],
   }
 }

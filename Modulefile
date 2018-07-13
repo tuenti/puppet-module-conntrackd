@@ -7,3 +7,4 @@ description 'Install and manages to conntrackd service to help manage stateful f
 source 'git://github.com/bisscuitt/puppet-module-conntrackd.git'
 project_page 'https://github.com/bisscuitt/puppet-module-conntrackd'
 dependency 'puppetlabs/stdlib', '>= 2.3.1'
+dependency 'camptocamp-systemd', '>= 1.1.1'
