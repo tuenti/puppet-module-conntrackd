@@ -259,6 +259,22 @@
 #   values: <tt>true</tt>, <tt>false</tt>
 #   Default: <tt>false</tt>
 #
+#  [*systemd_after*]
+#   array  : List of units for systemd After directive
+#   Default: network.target, network-online.target
+#
+#  [*systemd_wants*]
+#   array  : List of units for systemd Wants directive
+#   Default: network-online.target
+#
+#  [*systemd_before*]
+#   array  : List of units for systemd Before directive
+#   Default: none
+#
+#  [*systemd_wantedby*]
+#   array  : List of units for systemd WantedBy directive
+#   Default: none
+#
 #  [*expectation_sync*]
 #   String of Array of expectation sync. If value is a string it must
 #     be one of On or Off.
@@ -334,6 +350,10 @@ class conntrackd::config (
   $scheduler_type                 = $conntrackd::params::scheduler_type,
   $scheduler_priority             = $conntrackd::params::scheduler_priority,
   $systemd                        = $conntrackd::params::systemd,
+  $systemd_after                  = $conntrackd::params::systemd_after,
+  $systemd_before                 = $conntrackd::params::systemd_before,
+  $systemd_wants                  = $conntrackd::params::systemd_wants,
+  $systemd_wantedby               = $conntrackd::params::systemd_wantedby,
   $expectation_sync               = $conntrackd::params::expectation_sync,
   $kernel_ignore_ips_ipv4         = $conntrackd::params::kernel_ignore_ips_ipv4,
   $kernel_ignore_ips_ipv6         = $conntrackd::params::kernel_ignore_ips_ipv6,
@@ -414,5 +434,19 @@ class conntrackd::config (
     mode    => '0644',
     require => File['conntrackd-confdir'],
     notify  => Service['conntrackd'],
+  }
+
+  if !$systemd or $conntrackd::ensure in [false, 'absent'] {
+    $systemd_file_ensure = 'absent'
+  } else {
+    $systemd_file_ensure = 'file'
+  }
+
+  # configuration file
+  systemd::unit_file { 'conntrackd.service':
+    ensure  => $systemd_file_ensure,
+    path    => '/lib/systemd/system',
+    content => template('conntrackd/systemd.service.erb'),
+    require => Package['conntrackd'],
   }
 }
